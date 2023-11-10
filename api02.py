@@ -5,22 +5,47 @@ import json
 items = [
     {
         "id": 1,
-        "name": "Bagulho",
-        "description": "Apensas um bagulho",
-        "location": "Em uma caixa"
+        "name": "Ecu",
+        "description": "Injeção programavél",
+        "location": "Painel interno"
     }, {
         "id": 2,
-        "name": "Tranqueira",
-        "descripton": "Apenas uma tranqueira qualquer",
-        "location": "Em um gaveteriro"
+        "name": "Bicos",
+        "description": "Injetores",
+        "location": "Coletor plenum"
     }, {
         "id": 3,
-        "name": "Bagulhete",
-        "description": "Um Bagulhete qualquer",
-        "location": "na esquina"
+        "name": "Cabeçote",
+        "description": "Preparado",
+        "location": "Bloco do motor"
+    }, {
+        "id": 4,
+        "name": "Pistão",
+        "description": "Forjado",
+        "location": "Bloco do motor"
+    }, {
+        "id": 5,
+        "name": "Turbo",
+        "description": "Turbina",
+        "location": "Coletor de escape"
+    }, {
+        "id": 6,
+        "name": "Escapamento",
+        "description": "Inox",
+        "location": "Full inox"
+
+    }, {
+        "id": 7,
+        "name": "Biela",
+        "description": "Forjada",
+        "location": "Bloco do motor"
+
+    }, {
+        "id": 8,
+        "name": "Embreagem",
+        "description": "Cerâmica",
+        "location": "Volante motor"
     }
-
-
 ]
 # Função que lê e lista todos os itens da coleção.
 def get_all():
