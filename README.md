@@ -4,3 +4,7 @@
  ## Requisitos
 
  - Pytohn 3.10
+
+ ## Opecionais
+ 
+ - Db (SQLite) https://sqlitebrowser.org/
