@@ -41,10 +41,28 @@ def get_one_item(id):
     else: # Se não existir. 
         return {"ERRO": "Registro não encontrado."} # Retorna 'erro' se não encontrar 
     
+    
+def get_one_owner(id):
+    
+    conn = sqlite3.connect(database)
+    conn.row_factory = sqlite3.Row
+    cursor = conn.cursor()
+    sql = "select * FROM owner WHERE owner_status !='off' AND owner_id=?"
+    cursor.execute(sql, (id,))
+    data = cursor.fetchone() 
+    conn.close()
+    
+    if data:
+        return dict(data) 
+        
+    else: 
+        return {"ERRO": "Registro não encontrado."}     
+    
  
     
     
 os.system('cls') # Limpa o console.
 
 # print (json.dumps(get_all_items(), ensure_ascii=False,indent=2)) # json.dumps( exibe no console no formato Json) get_all_items(items obtidos da função) ensure_ascii=False(usando a tabela utf-8) indent=2(formata o Json).
-print (json.dumps(get_one_item(7), ensure_ascii=False,indent=2)) # json.dumps( exibe no console no formato Json) get_one_item(item obtidos da função) ensure_ascii=False(usando a tabela utf-8) indent=2(formata o Json).
+# print (json.dumps(get_one_item(7), ensure_ascii=False,indent=2)) # json.dumps( exibe no console no formato Json) get_one_item(item obtidos da função) ensure_ascii=False(usando a tabela utf-8) indent=2(formata o Json).
+print (json.dumps(get_one_owner(5), ensure_ascii=False,indent=2))
