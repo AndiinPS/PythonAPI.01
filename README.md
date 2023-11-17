@@ -4,6 +4,9 @@
  ## Requisitos
 
  - Pytohn 3.10
+ - Flask
+ - Json
+ 
 
  ## Opecionais
  
