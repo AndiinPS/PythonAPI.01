@@ -1,3 +1,4 @@
+
 # -*- coding: utf-8 -*-
 
 # Importa bibliotecas.
@@ -112,3 +113,6 @@ def create():
 # Roda aplicativo Flask.
 if __name__ == "__main__":
     app.run(debug=True)
+
+
+   
