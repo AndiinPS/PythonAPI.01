@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 # Importa bibliotecas.
-from flask import Flask, jsonify, request, abort, make_response, json, Response
+from FLASK import Flask, jsonify, request, abort, make_response, json, Response
 import sqlite3
 
 # Cria aplicativo Flask.
