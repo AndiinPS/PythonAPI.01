@@ -77,50 +77,7 @@ def get_all_owners():
     except Exception as e:  # Outros erros.
         return {"error": f"Erro inesperado: {str(e)}"}, 500
  
-    
-@app.route("/owners/<int:id>/items", methods=["GET"])
-def get_owner_items(id):
-    try:
-        # Conecta ao banco de dados.
-        conn = sqlite3.connect(database)
-        conn.row_factory = sqlite3.Row
-        cursor = conn.cursor()
-
-        # Executa o SQL para selecionar todos os itens do proprietário específico.
-        cursor.execute(
-            "SELECT * FROM item WHERE item_owner = ? AND item_status = 'off'", (id,))
-
-        # Retorna todos os resultados da consulta para 'items_rows'.
-        items_rows = cursor.fetchall()
-
-        # Fecha a conexão com o banco de dados.
-        conn.close()
-
-        # Cria uma lista para armazenar os itens.
-        items = []
-
-        # Converte cada SQLite.Row em um dicionário e adiciona à lista 'items'.
-        for item in items_rows:
-            items.append(dict(item))
-
-        # Verifica se há itens antes de retornar...
-        if items:
-            # Remove prefixos dos campos.
-            new_items = [prefix_remove('item_', item) for item in items]
-
-            # Se houver itens, retorna tudo.
-            return new_items, 200
-        else:
-            # Se não houver itens, retorna um erro.
-            return {"error": "Nenhum item encontrado para este proprietário"}, 404
-
-    except sqlite3.Error as e:  # Erro ao processar banco de dados.
-        return {"error": f"Erro ao acessar o banco de dados: {str(e)}"}, 500
-
-    except Exception as e:  # Outros erros.
-        return {"error": f"Erro inesperado: {str(e)}"}, 500
-
-
+ 
 
 @app.route("/owners/<int:id>", methods=["GET"])
 def get_one_owner(id):
@@ -285,7 +242,54 @@ def edit_owner(id):
     except Exception as e:  # Outros erros.
         return {"error": f"Erro inesperado: {str(e)}"}, 500
     
+    
+    
+    
+@app.route("/owners/<int:id>/items", methods=["GET"])
+def get_owner_items(id):
+    try:
+        # Conecta ao banco de dados.
+        conn = sqlite3.connect(database)
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
 
+        # Executa o SQL para selecionar todos os itens do proprietário específico.
+        cursor.execute(
+            "SELECT * FROM item WHERE item_owner = ? AND item_status != 'off'", (id,))
+
+        # Retorna todos os resultados da consulta para 'items_rows'.
+        items_rows = cursor.fetchall()
+
+        # Fecha a conexão com o banco de dados.
+        conn.close()
+
+        # Verifica se há itens antes de retornar...
+        if items_rows:
+            # Cria uma lista para armazenar os itens.
+            items = []
+
+            # Converte cada SQLite.Row em um dicionário e adiciona à lista 'items'.
+            for item_row in items_rows:
+                item = dict(item_row)
+                # Remove prefixos dos campos.
+                item = prefix_remove('item_', item)
+                items.append(item)
+
+            # Se houver itens, retorna tudo.
+            return items, 200
+        else:
+            # Se não houver itens, retorna um erro.
+            return {"error": "Nenhum item encontrado para este proprietário"}, 404
+
+    except sqlite3.Error as e:  # Erro ao processar banco de dados.
+        return {"error": f"Erro ao acessar o banco de dados: {str(e)}"}, 500
+
+    except Exception as e:  # Outros erros.
+        return {"error": f"Erro inesperado: {str(e)}"}, 500
+    
+    
+    
+    
 @app.route("/item/<int:id>/owner", methods=["GET"])
 def get_item_with_owner(id):
     try:
@@ -308,14 +312,9 @@ def get_item_with_owner(id):
         if item_owner_row:
             # Cria um dicionário combinando os dados do item e do proprietário.
             item_with_owner = {
-                "item": dict(item_owner_row)[:4],  # Detalhes do item
-                "owner": dict(item_owner_row)[4:]  # Detalhes do proprietário
+                "item": prefix_remove('item_', dict(item_owner_row)),
+                "owner": prefix_remove('owner_', dict(item_owner_row))
             }
-
-            # Remove prefixos dos campos do item.
-            item_with_owner["item"] = prefix_remove('item_', item_with_owner["item"])
-            # Remove prefixos dos campos do proprietário.
-            item_with_owner["owner"] = prefix_remove('owner_', item_with_owner["owner"])
 
             # Retorna os detalhes do item com seu proprietário.
             return item_with_owner, 200
@@ -328,6 +327,53 @@ def get_item_with_owner(id):
 
     except Exception as e:  # Outros erros.
         return {"error": f"Erro inesperado: {str(e)}"}, 500
+
+    
+    
+
+
+@app.route("/items/search/<string:query>")
+def item_search(query):
+
+    # Pesquisa todos os registros válidos de 'item' que conténha 'query' nos campos
+    # 'item_name', 'item_description' ou 'item_location'.
+    # Request method → GET
+    # Request endpoint → /items/search/<string:query>
+    # Response → JSON
+
+    try:
+        conn = sqlite3.connect(database)
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        sql = """
+            SELECT * FROM item
+            WHERE item_status != 'off' AND (
+                item_name LIKE '%' || ? || '%' OR
+                item_description LIKE '%' || ? || '%' OR
+                item_location LIKE '%' || ? || '%'
+            );        
+        """
+        cursor.execute(sql, (query, query, query))
+        items_rows = cursor.fetchall()
+        conn.close()
+
+        items = []
+        for item in items_rows:
+            items.append(dict(item))
+
+        if items:
+            new_items = [prefix_remove('item_', item) for item in items]
+            return new_items, 200
+        else:
+            return {"error": "Nenhum item encontrado"}, 404
+
+    except sqlite3.Error as e:
+        return {"error": f"Erro ao acessar o banco de dados: {str(e)}"}, 500
+
+    except Exception as e:
+        return {"error": f"Erro inesperado: {str(e)}"}, 500
+    
+    
 
 
 # Roda aplicativo Flask.
