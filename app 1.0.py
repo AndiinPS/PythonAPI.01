@@ -1,25 +1,18 @@
 # -*- coding: utf-8 -*-
 
-# Importa bibliotecas.
+
 from flask import Flask, jsonify, request, abort, make_response, json, Response
 import sqlite3
 
-# Cria aplicativo Flask.
+
 app = Flask(__name__)
 
-# Configura o character set das transações HTTP para UTF-8.
+
 json.provider.DefaultJSONProvider.ensure_ascii = False
 
-# Especifica a base de dados SQLite3.
 database = "./db.db"
 
-
 def prefix_remove(prefix, data):
-
-    # Função que remove os prefixos dos nomes dos campos de um 'dict'.
-    # Por exemplo, prefix_remove('item_', { 'item_id': 2, 'item_name': 'Coisa', 'item_status': 'on' })
-    # retorna { 'id': 2, 'name': 'Coisa', 'status': 'on' }
-    # Créditos: Comunidade StackOverflow.
 
     new_data = {}
     for key, value in data.items():
@@ -29,7 +22,6 @@ def prefix_remove(prefix, data):
         else:
             new_data[key] = value
     return new_data
-
 
 @app.route("/items", methods=["GET"])
 def get_all():
@@ -86,7 +78,6 @@ def get_all():
     except Exception as e:  # Outros erros.
         return {"error": f"Erro inesperado: {str(e)}"}, 500
 
-
 @app.route("/items/<int:id>", methods=["GET"])
 def get_one(id):
 
@@ -131,7 +122,6 @@ def get_one(id):
 
     except Exception as e:  # Outros erros.
         return {"error": f"Erro inesperado: {str(e)}"}, 500
-
 
 @app.route('/items', methods=["POST"])
 def create():
@@ -185,7 +175,6 @@ def create():
 
     except Exception as e:  # Outros erros.
         return {"error": f"Erro inesperado: {str(e)}"}, 500
-
 
 @app.route("/items/<int:id>", methods=["DELETE"])
 def delete(id):
@@ -244,7 +233,6 @@ def delete(id):
     except Exception as e:  # Outros erros.
         return {"error": f"Erro inesperado: {str(e)}"}, 500
 
-
 @app.route("/items/<int:id>", methods=["PUT", "PATCH"])
 def edit(id):
 
@@ -289,8 +277,6 @@ def edit(id):
         return {"error": f"Erro inesperado: {str(e)}"}, 500
 
     return {"olá": "mundo"}
-
-
 
 @app.route("/owners", methods=["GET"])
 def get_all_owners():
@@ -337,8 +323,6 @@ def get_all_owners():
 
     except Exception as e:  # Outros erros.
         return {"error": f"Erro inesperado: {str(e)}"}, 500
- 
- 
 
 @app.route("/owners/<int:id>", methods=["GET"])
 def get_one_owner(id):
@@ -377,8 +361,6 @@ def get_one_owner(id):
 
     except Exception as e:  # Outros erros.
         return {"error": f"Erro inesperado: {str(e)}"}, 500
-
-
 
 @app.route('/owner', methods=["POST"])
 def create_owner():
@@ -419,8 +401,6 @@ def create_owner():
 
     except Exception as e:  # Outros erros.
         return {"error": f"Erro inesperado: {str(e)}"}, 500
-
-
 
 @app.route("/owners/<int:id>", methods=["DELETE"])
 def delete_owner(id):
@@ -469,8 +449,6 @@ def delete_owner(id):
     except Exception as e:  
         return {"error": f"Erro inesperado: {str(e)}"}, 500
 
-
-
 @app.route("/owners/<int:id>", methods=["PUT", "PATCH"])
 def edit_owner(id):
     try:
@@ -502,10 +480,7 @@ def edit_owner(id):
 
     except Exception as e:  # Outros erros.
         return {"error": f"Erro inesperado: {str(e)}"}, 500
-    
-    
-    
-    
+
 @app.route("/owners/<int:id>/items", methods=["GET"])
 def get_owner_items(id):
     try:
@@ -547,10 +522,7 @@ def get_owner_items(id):
 
     except Exception as e:  # Outros erros.
         return {"error": f"Erro inesperado: {str(e)}"}, 500
-    
-    
-    
-    
+
 @app.route("/item/<int:id>/owner", methods=["GET"])
 def get_item_with_owner(id):
     try:
@@ -588,10 +560,6 @@ def get_item_with_owner(id):
 
     except Exception as e:  # Outros erros.
         return {"error": f"Erro inesperado: {str(e)}"}, 500
-
-    
-    
-
 
 @app.route("/items/search/<string:query>")
 def item_search(query):
@@ -633,7 +601,6 @@ def item_search(query):
 
     except Exception as e:
         return {"error": f"Erro inesperado: {str(e)}"}, 500
-
 
 # Roda aplicativo Flask.
 if __name__ == "__main__":
