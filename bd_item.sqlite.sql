@@ -65,3 +65,14 @@ VALUES ('2023-09-13 15:23:15', 'Processador', 'intel i9 ', 'Em estoque', 1, 'on'
 	
 
 
+-- Cria a tabela 'contact'.
+
+CREATE TABLE contact (
+	id INTEGER PRIMARY KEY AUTOINCREMENT,
+	date DATETIME DEFAULT CURRENT_TIMESTAMP,
+	name TEXT,
+	email TEXT,
+	subject TEXT,
+	message TEXT,
+	status TEXT DEFAULT 'received'
+);
