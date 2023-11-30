@@ -2,10 +2,12 @@
 
 
 from flask import Flask, jsonify, request, abort, make_response, json, Response
+from flask_cors import CORS
 import sqlite3
 
 
 app = Flask(__name__)
+CORS(app)
 
 
 json.provider.DefaultJSONProvider.ensure_ascii = False
@@ -275,8 +277,6 @@ def edit(id):
 
     except Exception as e:  # Outros erros.
         return {"error": f"Erro inesperado: {str(e)}"}, 500
-
-    return {"olá": "mundo"}
 
 @app.route("/owners", methods=["GET"])
 def get_all_owners():
