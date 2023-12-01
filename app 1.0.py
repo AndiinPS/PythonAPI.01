@@ -601,8 +601,7 @@ def item_search(query):
 
     except Exception as e:
         return {"error": f"Erro inesperado: {str(e)}"}, 500
-    
-    
+      
 @app.route("/contacts", methods=["POST"])
 def contacts():
 
