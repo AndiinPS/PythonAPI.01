@@ -7,7 +7,7 @@ import sqlite3
 
 
 app = Flask(__name__)
-CORS(app)
+CORS(app) 
 
 
 json.provider.DefaultJSONProvider.ensure_ascii = False
