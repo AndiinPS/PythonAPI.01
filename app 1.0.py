@@ -482,7 +482,7 @@ def edit_owner(id):
     except Exception as e:  # Outros erros.
         return {"error": f"Erro inesperado: {str(e)}"}, 500
 
-@app.route("/owners/<int:id>/items", methods=["GET"])
+@app.route("/owners/items/<int:id>", methods=["GET"])
 def get_owner_items(id):
     try:
         # Conecta ao banco de dados.
